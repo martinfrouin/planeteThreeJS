@@ -73,14 +73,20 @@
 
         scene.add(moon);
 
+
+
+
+
         //Ajout de la lumiere
         var spotLight = new THREE.SpotLight(0xffffff);
         spotLight.position.set(10,20,20);
         spotLight.shadowCameraNear = 20;
         spotLight.shadowCameraFar = 50;
         spotLight.castShadow = true;
-
         scene.add(spotLight);
+
+        var light = new THREE.AmbientLight(0x404040);
+        scene.add(light);
 
         // create a render, sets the background color and the size
         renderer = new THREE.WebGLRenderer();
