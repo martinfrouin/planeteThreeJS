@@ -31,9 +31,9 @@
     var sphere;
     var moon;
     var cloudSphere;
-    var rotSpeedEarth = 0.002;
-    var rotSpeedMoon = 0.003;
-    var rotSpeedClouds = 0.005;
+    var rotSpeedEarth = 0.0008;
+    var rotSpeedMoon = 0.001;
+    var rotSpeedClouds = 0.0007;
     var posSpeedMoon = 0.01;
 
     /**
@@ -99,7 +99,7 @@
         var pointMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         point = new THREE.Mesh(pointGeometry, pointMaterial);
 
-        scene.add(point);
+        sphere.add(point);
 
 
 
@@ -177,8 +177,7 @@
      function render() {
         //Update cameraControle
 
-        //sphere.rotation.y = sphere.rotation.y + rotSpeedEarth;
-        //point.rotation.y = point.rotation.y + rotSpeedEarth;
+        sphere.rotation.y = sphere.rotation.y + rotSpeedEarth;
         moon.position.x = moon.position.x * Math.cos(posSpeedMoon) + moon.position.z * Math.sin(posSpeedMoon);
         moon.position.z = moon.position.z * Math.cos(posSpeedMoon) - moon.position.x * Math.sin(posSpeedMoon);
         moon.rotation.y = moon.rotation.y + rotSpeedMoon;
