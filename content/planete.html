@@ -25,7 +25,8 @@
     var scene;
     var camera;
     var radiusEarth = 4;
-    var radiusCloud = radiusEarth + 0.5;
+    var radiusPoint = 0.01;
+    var radiusCloud = radiusEarth + 0.05;
     var radiusMoon = radiusEarth / 3.67; //D'apres des calculs scientifique
     var sphere;
     var moon;
@@ -39,7 +40,19 @@
      * Initializes the scene, camera and objects. Called when the window is
      * loaded by using window.onload (see below)
      */
-     function init() {
+     var convertCoordinates = function(lat, lon, radius, heigth) {
+        var phi = (lat)*Math.PI/180;
+        var theta = (lon-180)*Math.PI/180;
+
+        var x = -(radius+heigth) * Math.cos(phi) * Math.cos(theta);
+        var y = (radius+heigth) * Math.sin(phi);
+        var z = (radius+heigth) * Math.cos(phi) * Math.sin(theta);
+
+        return new THREE.Vector3(x,y,z);
+    }
+
+
+    function init() {
 
         // create a scene, that will hold all our elements such as objects, cameras and lights.
         scene = new THREE.Scene();
@@ -78,6 +91,17 @@
         moon.position.z = 8;
 
         scene.add(moon);
+
+
+
+        //Ajout du point
+        var pointGeometry = new THREE.SphereGeometry(radiusPoint,50,50);
+        var pointMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+        point = new THREE.Mesh(pointGeometry, pointMaterial);
+
+        scene.add(point);
+
+
 
         //Ajout de la lumiere
         var spotLight = new THREE.SpotLight(0xffffff);
@@ -121,6 +145,15 @@
         composer.addPass(effectCopy);
 
 
+
+
+        var latitudePoint = 44.8637065;
+        var longitudePoint = -0.6561808;
+
+        var position = convertCoordinates(latitudePoint, longitudePoint, radiusEarth, radiusPoint / 2);
+        point.position.set(position.x, position.y, position.z);
+
+
         
 
         // position and point the camera to the center of the scene
@@ -144,7 +177,8 @@
      function render() {
         //Update cameraControle
 
-        sphere.rotation.y = sphere.rotation.y + rotSpeedEarth;
+        //sphere.rotation.y = sphere.rotation.y + rotSpeedEarth;
+        //point.rotation.y = point.rotation.y + rotSpeedEarth;
         moon.position.x = moon.position.x * Math.cos(posSpeedMoon) + moon.position.z * Math.sin(posSpeedMoon);
         moon.position.z = moon.position.z * Math.cos(posSpeedMoon) - moon.position.x * Math.sin(posSpeedMoon);
         moon.rotation.y = moon.rotation.y + rotSpeedMoon;
